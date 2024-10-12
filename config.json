@@ -1,0 +1,24 @@
+{
+    "development": {
+      "dialect": "postgres",
+      "host": "localhost",
+      "username": "postgres",
+      "password": "2636",
+      "database": "climateapp"
+    },
+    "test": {
+      "dialect": "postgres",
+      "host": "localhost",
+      "username": "postgres",
+      "password": "2636",
+      "database": "climateapp_test"
+    },
+    "production": {
+      "dialect": "postgres",
+      "host": "localhost",
+      "username": "postgres",
+      "password": "2636",
+      "database": "climateapp_prod"
+    }
+  }
+  
