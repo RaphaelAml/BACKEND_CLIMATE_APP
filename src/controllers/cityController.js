@@ -1,12 +1,12 @@
-const axios = require('axios'); // Adicione esta linha
-const City = require('../models/City'); // Importando o modelo City 
+const axios = require('axios'); 
+const City = require('../models/City'); 
 
 // Adicionar cidade
 const addCity = async (req, res) => {
     const { name } = req.body; // Pegue apenas o nome da cidade do corpo da requisição
   
     try {
-      // Substitua `YOUR_API_KEY` pela sua chave da API OpenWeatherMap
+    
       const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${name}&appid=b7087c46c48a5f8204d2a390912ac7fc`);
       const { lat, lon } = response.data.coord; // Extraia latitude e longitude da resposta
   

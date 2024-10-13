@@ -1,5 +1,5 @@
 const axios = require('axios');
-const WeatherForecast = require('../models/WeatherForecast'); // Importe o modelo
+const WeatherForecast = require('../models/WeatherForecast'); 
 
 const API_KEY = 'b7087c46c48a5f8204d2a390912ac7fc'; 
 const BASE_URL = 'http://api.openweathermap.org/data/2.5/weather';

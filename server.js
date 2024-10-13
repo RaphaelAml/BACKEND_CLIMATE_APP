@@ -1,4 +1,3 @@
-// server.js
 const express = require("express");
 const sequelize = require("./src/config/database");
 const weatherRoutes = require('./src/routes/weatherRoutes');
@@ -10,7 +9,7 @@ app.use(express.json());
 
 // Inicializa Sequelize e sincroniza os modelos
 sequelize
-  .sync({ alter: true }) // Altere para { alter: true } para evitar perda de dados
+  .sync({ alter: true }) 
   .then(() => {
     console.log("Database synced successfully!");
   })
@@ -25,7 +24,8 @@ app.get("/", (req, res) => {
 
 // Usar as rotas de clima e cidades
 app.use("/api", weatherRoutes);
-app.use("/api", cityRoutes); // Adicione esta linha para usar as rotas de cidade
+app.use("/api", cityRoutes); 
+app.use('/api', weatherRoutes); // Usando as rotas no caminho base "/api"
 
 // Iniciar o servidor
 app.listen(3000, () => {
