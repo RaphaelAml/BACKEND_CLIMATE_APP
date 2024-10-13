@@ -1,6 +1,5 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
-const State = require('./State');
 
 class Country extends Model {}
 
@@ -16,11 +15,9 @@ Country.init({
   },
 }, {
   sequelize,
-  modelName: 'Country',
+  modelName: 'Coauntry',
   tableName: 'countries',
   timestamps: true,
 });
-
-Country.hasMany(State, { foreignKey: 'countryId' });
 
 module.exports = Country;

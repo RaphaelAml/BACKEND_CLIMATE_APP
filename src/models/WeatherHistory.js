@@ -28,11 +28,8 @@ WeatherHistory.init({
 }, {
   sequelize,
   modelName: 'WeatherHistory',
-  tableName: 'weather_histories',
+  tableName: 'weather_history',
   timestamps: true,
 });
-
-WeatherHistory.belongsTo(CityForecast, { foreignKey: 'cityForecastId' });
-WeatherHistory.belongsTo(City, { foreignKey: 'cityId' });
 
 module.exports = WeatherHistory;

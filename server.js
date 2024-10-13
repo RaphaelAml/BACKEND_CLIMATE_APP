@@ -1,32 +1,32 @@
 const express = require('express');
-const sequelize = require('./src/config/database'); // Certifique-se que o caminho está correto
+const sequelize = require('./src/config/database');
+const City = require('./src/models/City');
+const User = require('./src/models/User');
+const CityForecast = require('./src/models/CityForecast');
+const WeatherHistory = require('./src/models/WeatherHistory');
+const WeatherForecast = require('./src/models/WeatherForecast'); // Adicionando WeatherForecast
 
-// Importar os modelos que serão sincronizados
-require('./src/models/City');
-require('./src/models/CityForecast');
-require('./src/models/Country')
-require('./src/models/State');
-require('./src/models/User');
-require('./src/models/WeatherHistory');
-require('./src/models/WeatherForecast');
+// Associate models
+City.hasMany(User, { foreignKey: 'cityId', onDelete: 'CASCADE' });
+User.belongsTo(City, { foreignKey: 'cityId' });
 
-const app = express();
-const PORT = 3000;
+City.hasMany(CityForecast, { foreignKey: 'cityId', onDelete: 'CASCADE' });
+CityForecast.belongsTo(City, { foreignKey: 'cityId' });
 
-// Teste de conexão com o banco de dados e sincronização
-sequelize.authenticate()
+CityForecast.hasMany(WeatherHistory, { foreignKey: 'cityForecastId', onDelete: 'CASCADE' });
+WeatherHistory.belongsTo(CityForecast, { foreignKey: 'cityForecastId' });
+
+City.hasMany(WeatherForecast, { foreignKey: 'cityId', onDelete: 'CASCADE' }); // Adicionando associação com WeatherForecast
+CityForecast.hasMany(WeatherForecast, { foreignKey: 'cityForecastId', onDelete: 'CASCADE' });
+WeatherForecast.belongsTo(City, { foreignKey: 'cityId' });
+WeatherForecast.belongsTo(CityForecast, { foreignKey: 'cityForecastId' });
+
+// Initialize Sequelize
+sequelize.sync({ force: true })
   .then(() => {
-    console.log('Conexão com o banco de dados foi bem-sucedida!');
-    // Sincronizar os modelos com o banco de dados
-    return sequelize.sync({ alter: true }); // `alter: true` atualiza a tabela sem destruir os dados
-  })
-  .then(() => {
-    console.log('Tabelas criadas ou atualizadas com sucesso!');
+    console.log('Database synced successfully!');
+    // Start your Express app here
   })
   .catch(err => {
-    console.error('Erro ao conectar com o banco de dados:', err);
+    console.error('Error syncing database:', err);
   });
-
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});

@@ -1,6 +1,7 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 const CityForecast = require('./CityForecast');
+const City = require('./City');  // Certifique-se de importar o model City
 
 class WeatherForecast extends Model {}
 
@@ -10,37 +11,29 @@ WeatherForecast.init({
     primaryKey: true,
     autoIncrement: true,
   },
-  forecastTime: {
-    type: DataTypes.DATE,
-    allowNull: false,
+  cityForecastId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: CityForecast,
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   },
-  conditionDescription: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  temperature: {
-    type: DataTypes.DECIMAL(5, 2),
-    allowNull: false,
-  },
-  humidity: {
-    type: DataTypes.DECIMAL(5, 2),
-    allowNull: false,
-  },
-  windSpeed: {
-    type: DataTypes.DECIMAL(5, 2),
-    allowNull: false,
-  },
-  forecast: {
-    type: DataTypes.STRING(45),
-    allowNull: false,
+  cityId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: City,
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   },
 }, {
   sequelize,
-  modelName: 'WeatherForecast',
-  tableName: 'weather_forecasts',
+  modelName: 'WeatherForecast', // Altere para o nome correto do model
+  tableName: 'weather_forecasts', // Altere para o nome correto da tabela
   timestamps: true,
 });
-
-WeatherForecast.belongsTo(CityForecast, { foreignKey: 'cityForecastId' });
 
 module.exports = WeatherForecast;
