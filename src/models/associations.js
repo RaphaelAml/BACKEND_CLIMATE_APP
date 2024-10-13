@@ -1,24 +1,27 @@
-import State from "./State";
-import Country from "./Country";
-import City from "./City";
-import User from "./User";
-import WeatherForecast from "./WeatherForecast"; 
-import CityForecast from "./CityForecast";
-import WeatherHistory from "./WeatherHistory";
+// src/models/associations.js
+const City = require('./City');
+const User = require('./User');
+const CityForecast = require('./CityForecast');
+const WeatherForecast = require('./WeatherForecast');
+const WeatherHistory = require('./WeatherHistory');
 
-// Associations
-City.belongsTo(State);
-State.belongsTo(Country);
-User.belongsTo(City);
+// Associações
+City.hasMany(User, { foreignKey: "cityId", onDelete: "CASCADE" });
+User.belongsTo(City, { foreignKey: "cityId" });
 
-WeatherHistory.belongsTo(CityForecast, { foreignKey: 'cityForecastId' });
-WeatherHistory.belongsTo(City, { foreignKey: 'cityId' });
+City.hasMany(CityForecast, { foreignKey: "cityId", onDelete: "CASCADE" });
+CityForecast.belongsTo(City, { foreignKey: "cityId" });
 
-City.hasMany(WeatherHistory, { foreignKey: 'cityId', onDelete: 'CASCADE' });
-CityForecast.hasMany(WeatherHistory, { foreignKey: 'cityForecastId', onDelete: 'CASCADE' });
+CityForecast.hasMany(WeatherHistory, {
+  foreignKey: "cityForecastId",
+  onDelete: "CASCADE",
+});
+WeatherHistory.belongsTo(CityForecast, { foreignKey: "cityForecastId" });
 
-WeatherForecast.belongsTo(CityForecast, { foreignKey: 'cityForecastId' });
-WeatherForecast.belongsTo(City, { foreignKey: 'cityId' });
-
-City.hasMany(WeatherForecast, { foreignKey: 'cityId', onDelete: 'CASCADE' });
-CityForecast.hasMany(WeatherForecast, { foreignKey: 'cityForecastId', onDelete: 'CASCADE' });
+City.hasMany(WeatherForecast, { foreignKey: "cityId", onDelete: "CASCADE" });
+CityForecast.hasMany(WeatherForecast, {
+  foreignKey: "cityForecastId",
+  onDelete: "CASCADE",
+});
+WeatherForecast.belongsTo(City, { foreignKey: "cityId" });
+WeatherForecast.belongsTo(CityForecast, { foreignKey: "cityForecastId" });

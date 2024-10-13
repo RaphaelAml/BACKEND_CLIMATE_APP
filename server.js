@@ -1,46 +1,27 @@
+// server.js
 const express = require("express");
 const sequelize = require("./src/config/database");
+const weatherRoutes = require('./src/routes/weatherRoutes');
 const City = require("./src/models/City");
 const User = require("./src/models/User");
 const CityForecast = require("./src/models/CityForecast");
 const WeatherHistory = require("./src/models/WeatherHistory");
 const WeatherForecast = require("./src/models/WeatherForecast");
-const weatherRoutes = require('./src/routes/weatherRoutes'); // Adicione esta linha
+const cityRoutes = require("./src/routes/cityRoutes");
+require('./src/models/associations');  // Importando as associações
 
-// Associate models
-City.hasMany(User, { foreignKey: "cityId", onDelete: "CASCADE" });
-User.belongsTo(City, { foreignKey: "cityId" });
+const app = express();
+app.use(express.json());
 
-City.hasMany(CityForecast, { foreignKey: "cityId", onDelete: "CASCADE" });
-CityForecast.belongsTo(City, { foreignKey: "cityId" });
-
-CityForecast.hasMany(WeatherHistory, {
-  foreignKey: "cityForecastId",
-  onDelete: "CASCADE",
-});
-WeatherHistory.belongsTo(CityForecast, { foreignKey: "cityForecastId" });
-
-City.hasMany(WeatherForecast, { foreignKey: "cityId", onDelete: "CASCADE" });
-CityForecast.hasMany(WeatherForecast, {
-  foreignKey: "cityForecastId",
-  onDelete: "CASCADE",
-});
-WeatherForecast.belongsTo(City, { foreignKey: "cityId" });
-WeatherForecast.belongsTo(CityForecast, { foreignKey: "cityForecastId" });
-
-// Initialize Sequelize
+// Inicializa Sequelize e sincroniza os modelos
 sequelize
   .sync({ force: true })
   .then(() => {
     console.log("Database synced successfully!");
-    // Start your Express app here
   })
   .catch((err) => {
     console.error("Error syncing database:", err);
   });
-
-const app = express();
-app.use(express.json());
 
 // Rotas
 app.get("/", (req, res) => {
@@ -49,6 +30,7 @@ app.get("/", (req, res) => {
 
 // Usar as rotas de clima
 app.use("/api", weatherRoutes);
+app.use("/api", cityRoutes); // Adicione esta linha para usar as rotas de cidade
 
 // Iniciar o servidor
 app.listen(3000, () => {

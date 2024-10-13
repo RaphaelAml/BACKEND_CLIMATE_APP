@@ -12,6 +12,11 @@ CityForecast.init({
   cityId: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    references: {
+      model: 'city', // Nome da tabela de cidades
+      key: 'id',
+    },
+    onDelete: 'CASCADE', // Caso a cidade seja deletada, as previsões devem ser deletadas também
   },
   forecastTime: {
     type: DataTypes.DATE,
