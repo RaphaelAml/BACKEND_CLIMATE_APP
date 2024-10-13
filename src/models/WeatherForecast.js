@@ -1,7 +1,7 @@
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../config/database');
 const CityForecast = require('./CityForecast');
-const City = require('./City');  // Certifique-se de importar o model City
+const City = require('./City');  
 
 class WeatherForecast extends Model {}
 
@@ -31,8 +31,8 @@ WeatherForecast.init({
   },
 }, {
   sequelize,
-  modelName: 'WeatherForecast', // Altere para o nome correto do model
-  tableName: 'weather_forecasts', // Altere para o nome correto da tabela
+  modelName: 'WeatherForecast', 
+  tableName: 'weather_forecasts', 
   timestamps: true,
 });
 

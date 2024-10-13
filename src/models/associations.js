@@ -1,12 +1,12 @@
 import State from "./State";
 import Country from "./Country";
-import City from "./City"; // Importando City
+import City from "./City";
 import User from "./User";
-import WeatherForecast from "./WeatherForecast"; // Importando WeatherForecast
+import WeatherForecast from "./WeatherForecast"; 
 import CityForecast from "./CityForecast";
 import WeatherHistory from "./WeatherHistory";
 
-// Associações
+// Associations
 City.belongsTo(State);
 State.belongsTo(Country);
 User.belongsTo(City);
