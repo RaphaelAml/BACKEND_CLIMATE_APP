@@ -19,7 +19,9 @@ async function fetchCityData(cityName) {
     weather: data,
   };
 }
-
+//
+//
+//
 const getWeatherForCity = async (req, res) => {
   const { city } = req.params; // Pegando o nome da cidade da URL
 
