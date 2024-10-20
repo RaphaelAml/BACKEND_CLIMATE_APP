@@ -1,8 +1,10 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const cityController = require('../controllers/cityController');
 
-// Rota para adicionar uma cidade e buscar clima
-router.post('/weather', cityController.addCityAndGetWeather);
+const citiControl = require("../controllers/cityController");
+
+router.post("/weather", citiControl.addCityAndGetWeather);
+
+router.get("/api/weather/city", citiControl.getCityByName);
 
 module.exports = router;

@@ -1,15 +1,17 @@
-const axios = require('axios');
-const WeatherForecast = require('../models/WeatherForecast'); 
+const axios = require("axios");
+const WeatherForecast = require("../models/WeatherForecast");
 
-const API_KEY = 'b7087c46c48a5f8204d2a390912ac7fc'; 
-const BASE_URL = 'http://api.openweathermap.org/data/2.5/weather';
+const API_KEY = "b7087c46c48a5f8204d2a390912ac7fc";
+const BASE_URL = "http://api.openweathermap.org/data/2.5/weather";
 
 const getWeatherByCity = async (cityName) => {
   try {
-    const response = await axios.get(`${BASE_URL}?q=${cityName}&appid=${API_KEY}`);
+    const response = await axios.get(
+      `${BASE_URL}?q=${cityName}&appid=${API_KEY}`
+    );
     return response.data;
   } catch (error) {
-    console.error('Error fetching weather data:', error);
+    console.error("Error fetching weather data:", error);
     throw error;
   }
 };
@@ -38,7 +40,7 @@ const saveWeatherData = async (data, cityForecastId, cityId) => {
 
     return weatherForecast;
   } catch (error) {
-    console.error('Error saving weather data:', error);
+    console.error("Error saving weather data:", error);
     throw error; // Lançar o erro para ser tratado no controller
   }
 };
