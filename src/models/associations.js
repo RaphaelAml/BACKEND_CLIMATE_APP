@@ -1,4 +1,3 @@
-// src/models/associations.js
 const City = require('./City');
 const User = require('./User');
 const CityForecast = require('./CityForecast');

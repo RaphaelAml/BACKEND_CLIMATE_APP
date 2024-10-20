@@ -10,7 +10,7 @@ State.init({
     primaryKey: true,
     autoIncrement: true
   },
-  nome: DataTypes.STRING,
+  name: DataTypes.STRING,
   prefixo: DataTypes.STRING,
   countryId: {
     type: DataTypes.INTEGER,
