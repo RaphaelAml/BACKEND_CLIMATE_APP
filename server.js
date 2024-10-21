@@ -14,8 +14,19 @@ app.use(express.json());
 // permite requisições do frontend
 app.use(cors());
 
+//log de requisições
+app.use((req, res, next) => {
+  console.log(`Recebido request: ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // Usar rotas
 app.use("/api", cityRoutes);
+
+// Erro de rota n encontrada
+app.use((req, res) => {
+  res.status(404).send("Route not found");
+});
 
 // Inicializa Sequelize e sincroniza os modelos
 sequelize

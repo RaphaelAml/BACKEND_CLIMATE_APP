@@ -10,6 +10,7 @@ require("dotenv").config();
 const API_KEY = process.env.OPENWEATHER_API_KEY;
 
 const getCityByName = async (req, res) => {
+  console.log("Received request for city:", req.query);
   const { name } = req.query;
   try {
     const city = await City.findOne({ where: { name } });
@@ -27,6 +28,7 @@ const getCityByName = async (req, res) => {
 
 // Função para adicionar uma cidade e buscar o clima
 const addCityAndGetWeather = async (req, res) => {
+  console.log("Received request POST for city:", req.query);
   const { cityName, stateName, countryName, latitude, longitude } = req.body; // Receber dados da cidade, estado e país no corpo da requisição
 
   try {
@@ -58,7 +60,7 @@ const addCityAndGetWeather = async (req, res) => {
     // 4. Fazer chamada para a API do OpenWeather
     const { latitude: lat, longitude: lon } = city; // Use latitude e longitude da cidade encontrada
     const response = await axios.get(
-      `https://api.openweathermap.org/data/2.5/weather`,
+      process.env.OPENWEATHER_API_URL,
       {
         params: {
           lat,
@@ -109,5 +111,5 @@ const addCityAndGetWeather = async (req, res) => {
 
 module.exports = {
   addCityAndGetWeather,
-  getCityByName,
+  getCityByName
 };

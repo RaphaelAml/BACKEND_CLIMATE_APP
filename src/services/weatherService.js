@@ -1,8 +1,8 @@
 const axios = require("axios");
 const WeatherForecast = require("../models/WeatherForecast");
 
-const API_KEY = "b7087c46c48a5f8204d2a390912ac7fc";
-const BASE_URL = "http://api.openweathermap.org/data/2.5/weather";
+const API_KEY = process.env.OPENWEATHER_API_KEY;
+const BASE_URL = process.env.OPENWEATHER_API_URL;
 
 const getWeatherByCity = async (cityName) => {
   try {

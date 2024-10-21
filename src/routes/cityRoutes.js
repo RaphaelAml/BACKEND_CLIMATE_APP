@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
+const cityControl = require("../controllers/cityController");
 
-const citiControl = require("../controllers/cityController");
+router.post("/weather", cityControl.addCityAndGetWeather);
 
-router.post("/weather", citiControl.addCityAndGetWeather);
-
-router.get("/api/weather/city", citiControl.getCityByName);
+router.get("/weather/city", cityControl.getCityByName);
 
 module.exports = router;
