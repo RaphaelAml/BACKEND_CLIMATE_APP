@@ -6,7 +6,7 @@ services:
     environment:
       POSTGRES_DB: climateapp
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: DB_PASSWORD
+      POSTGRES_PASSWORD: 1234
     ports:
       - "5432:5432"
     volumes:

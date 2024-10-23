@@ -1,7 +1,7 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../config/database");
 
-class Country extends Model {}
+class Country extends Model { }
 
 Country.init(
   {
@@ -17,7 +17,7 @@ Country.init(
   },
   {
     sequelize,
-    modelName: "Coauntry",
+    modelName: "Country",
     tableName: "countries",
     timestamps: true,
   }

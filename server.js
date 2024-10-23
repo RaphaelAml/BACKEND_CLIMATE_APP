@@ -1,12 +1,14 @@
 const express = require("express");
 const sequelize = require("./src/config/database");
-const cityRoutes = require("./src/routes/cityRoutes"); // Importando rotas da cidade
+const { Op } = require('sequelize');
+const cityRoutes = require("./src/routes/cityRoutes");
 const cors = require("cors");
 require("./src/models/associations");
 require("dotenv").config();
 
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 
 // Middleware para permitir JSON no corpo das requisições
 app.use(express.json());
@@ -31,14 +33,13 @@ app.use((req, res) => {
 // Inicializa Sequelize e sincroniza os modelos
 sequelize
   .sync({ alter: true })
-  .then(() => {
+  .then(async () => {
     console.log("Database synced successfully!");
+    // Iniciar o servidor
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
   })
   .catch((err) => {
     console.error("Error syncing database:", err);
   });
-
-// Iniciar o servidor
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});

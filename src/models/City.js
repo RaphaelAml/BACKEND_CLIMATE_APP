@@ -2,7 +2,7 @@ const { DataTypes, Model } = require("sequelize");
 const sequelize = require("../config/database");
 const State = require("./State");
 
-class City extends Model {}
+class City extends Model { }
 
 City.init(
   {
@@ -14,11 +14,11 @@ City.init(
     name: DataTypes.STRING,
     latitude: {
       type: DataTypes.DECIMAL(10, 6),
-      allowNull: false,
+      allowNull: true,
     },
     longitude: {
       type: DataTypes.DECIMAL(10, 6),
-      allowNull: false,
+      allowNull: true,
     },
     stateId: {
       type: DataTypes.INTEGER,
