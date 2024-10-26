@@ -8,3 +8,8 @@ router.post("/weather", cityController.addCityAndGetWeather); //contexto é de w
 router.get("/city", cityControl.getCityByName);
 
 module.exports = router;
+
+//
+//
+//
+//
