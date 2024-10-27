@@ -8,7 +8,7 @@ require("dotenv").config();
 
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 3003;
 
 // Middleware para permitir JSON no corpo das requisições
 app.use(express.json());

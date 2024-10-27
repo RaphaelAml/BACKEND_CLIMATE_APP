@@ -10,7 +10,7 @@ const getCityByName = async (req, res) => {
     const cities = await City.findAll({
       where: {
         name: {
-          [Op.iLike]: `${name}%`
+         [Op.iLike]: `${name}%`
         }
       },
       limit: 15 //limite de sugestoes retornadas 
