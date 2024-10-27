@@ -3,16 +3,28 @@ const City = require("../models/City");
 const WeatherForecast = require("../models/WeatherForecast");
 const CityForecast = require("../models/CityForecast");
 require("dotenv").config();
+const { Op } = require("sequelize");
 
 const API_KEY = process.env.OPENWEATHER_API_KEY;
 
-const SelectCityAndGetWeather = async (req, res) => {
-  const { cityId } = req.body; // Recebe o ID da cidade do front-end
+const GetWeatherByCityAndDate = async (req, res) => {
+  const { cityName, date } = req.body; // Recebe o nome da cidade e a data do front-end
 
   try {
-    // 1. Recupera a cidade pelo ID no banco de dados
+    // Converte a data recebida em um objeto Date
+    const paramDate = new Date(date);
+
+    // Verifica se a data é válida
+    if (isNaN(paramDate.getTime())) {
+      return res.status(400).json({ error: "Data inválida." });
+    }
+
+    // Converte para timestamp em segundos
+    const parsedDate = Math.floor(paramDate.getTime() / 1000);
+
+    // 1. Recupera a cidade pelo nome no banco de dados
     const city = await City.findOne({
-      where: { id: cityId },
+      where: { name: cityName },
       include: [
         {
           model: require("../models/State"),
@@ -68,7 +80,7 @@ const SelectCityAndGetWeather = async (req, res) => {
       // Se a entrada não existir, cria uma nova
       cityForecast = await CityForecast.create({
         cityId: city.id,
-        forecastTime: new Date(), // ou qualquer lógica de data que você queira usar
+        forecastTime: new Date(date), // ou qualquer lógica de data que você queira usar
       });
     }
 
@@ -92,9 +104,13 @@ const SelectCityAndGetWeather = async (req, res) => {
       timestamp: weatherData.dt,
     };
 
-    // 7. Verificar se já existe uma previsão do tempo para esta cidade e atualizar
+    // 7. Verificar se já existe uma previsão do tempo para esta cidade e data
     const existingWeatherForecast = await WeatherForecast.findOne({
-      where: { cityId: city.id, cityForecastId: cityForecast.id },
+      where: {
+        cityId: city.id,
+        cityForecastId: cityForecast.id,
+        timestamp: parsedDate,
+      },
     });
 
     if (existingWeatherForecast) {
@@ -119,5 +135,5 @@ const SelectCityAndGetWeather = async (req, res) => {
 };
 
 module.exports = {
-  SelectCityAndGetWeather,
+  GetWeatherByCityAndDate,
 };
