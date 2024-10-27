@@ -1,22 +1,20 @@
 // seed.js
-const sequelize = require("./src/config/database");
-const { seedCountryAndStates } = require("./src/config/seedDatabase");
+const sequelize = require("./src/config/DatabaseConfig");
+const { seedCountryAndStates } = require("./src/config/SeedDatabase");
 
 const runSeedState = async () => {
- try {
-  await sequelize.sync({ alter: true });
-  console.log("Database synced successfully!");
+  try {
+    await sequelize.sync({ alter: true });
+    console.log("Database synced successfully!");
 
-  await seedCountryAndStates();
+    await seedCountryAndStates();
 
-  console.log("Seeding completed successfully!");
- } catch (error) {
-  console.error("Error during seeding:", error);
- } finally {
-  await sequelize.close();
- }
+    console.log("Seeding completed successfully!");
+  } catch (error) {
+    console.error("Error during seeding:", error);
+  } finally {
+    await sequelize.close();
+  }
 };
 
 runSeedState();
-
-
