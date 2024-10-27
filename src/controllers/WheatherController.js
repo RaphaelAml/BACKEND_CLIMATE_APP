@@ -1,12 +1,12 @@
 const axios = require("axios");
 const City = require("../models/City");
 const WeatherForecast = require("../models/WeatherForecast");
-const CityForecast = require("../models/CityForecast"); 
+const CityForecast = require("../models/CityForecast");
 require("dotenv").config();
 
 const API_KEY = process.env.OPENWEATHER_API_KEY;
 
-const addCityAndGetWeather = async (req, res) => {
+const SelectCityAndGetWeather = async (req, res) => {
   const { cityId } = req.body; // Recebe o ID da cidade do front-end
 
   try {
@@ -60,7 +60,9 @@ const addCityAndGetWeather = async (req, res) => {
     const weatherData = response.data;
 
     // 6. Buscar ou criar uma entrada na tabela CityForecast
-    let cityForecast = await CityForecast.findOne({ where: { cityId: city.id } });
+    let cityForecast = await CityForecast.findOne({
+      where: { cityId: city.id },
+    });
 
     if (!cityForecast) {
       // Se a entrada não existir, cria uma nova
@@ -92,7 +94,7 @@ const addCityAndGetWeather = async (req, res) => {
 
     // 7. Verificar se já existe uma previsão do tempo para esta cidade e atualizar
     const existingWeatherForecast = await WeatherForecast.findOne({
-      where: { cityId: city.id, cityForecastId: cityForecast.id }
+      where: { cityId: city.id, cityForecastId: cityForecast.id },
     });
 
     if (existingWeatherForecast) {
@@ -117,5 +119,5 @@ const addCityAndGetWeather = async (req, res) => {
 };
 
 module.exports = {
-  addCityAndGetWeather,
+  SelectCityAndGetWeather,
 };
