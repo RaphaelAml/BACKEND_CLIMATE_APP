@@ -8,7 +8,7 @@ require("./src/models/Associations");
 require("dotenv").config();
 
 const app = express();
-const PORT = process.env.PORT || 3003;
+const PORT = process.env.PORT || 3002;
 
 // Middleware para permitir JSON no corpo das requisições
 app.use(express.json());
@@ -23,7 +23,7 @@ app.use((req, res, next) => {
 });
 
 // Usar rotas
-app.use("/api", cityRoutes);
+app.use("/api", cityRoutes, wheatherRoutes);
 
 // Erro de rota n encontrada
 app.use((req, res) => {
