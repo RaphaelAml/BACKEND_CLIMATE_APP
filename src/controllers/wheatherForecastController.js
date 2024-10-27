@@ -86,7 +86,3 @@ module.exports = {
   addCityAndGetWeather,
 };
 
-//
-//
-//
-//
