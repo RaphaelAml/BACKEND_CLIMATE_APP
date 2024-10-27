@@ -1,6 +1,7 @@
 const axios = require("axios");
 const City = require("../models/City");
 const WeatherForecast = require("../models/WeatherForecast");
+const CityForecast = require("../models/CityForecast"); 
 require("dotenv").config();
 
 const API_KEY = process.env.OPENWEATHER_API_KEY;
@@ -12,7 +13,12 @@ const addCityAndGetWeather = async (req, res) => {
     // 1. Recupera a cidade pelo ID no banco de dados
     const city = await City.findOne({
       where: { id: cityId },
-      include: [{ model: require("../models/State"), include: [require("../models/Country")] }],
+      include: [
+        {
+          model: require("../models/State"),
+          include: [require("../models/Country")],
+        },
+      ],
     });
 
     if (!city) {
@@ -24,7 +30,9 @@ const addCityAndGetWeather = async (req, res) => {
       console.log("Latitude ou longitude não encontradas. Buscando na API.");
 
       // 3. Chama a API do OpenWeather para obter os dados da cidade
-      const geoResponse = await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${city.name},BR&appid=${API_KEY}`);
+      const geoResponse = await axios.get(
+        `http://api.openweathermap.org/data/2.5/weather?q=${city.name},BR&appid=${API_KEY}`
+      );
       const geoData = geoResponse.data;
 
       // Atualiza a latitude e longitude da cidade
@@ -36,21 +44,37 @@ const addCityAndGetWeather = async (req, res) => {
     }
 
     // 4. Chamada à API do OpenWeather usando a latitude e longitude da cidade encontrada
-    const response = await axios.get("https://api.openweathermap.org/data/2.5/weather", {
-      params: {
-        lat: city.latitude,
-        lon: city.longitude,
-        appid: API_KEY,
-        units: "metric",
-      },
-    });
+    const response = await axios.get(
+      "https://api.openweathermap.org/data/2.5/weather",
+      {
+        params: {
+          lat: city.latitude,
+          lon: city.longitude,
+          appid: API_KEY,
+          units: "metric",
+        },
+      }
+    );
 
     // 5. Extrair e preparar dados relevantes para o banco de dados
     const weatherData = response.data;
+
+    // 6. Buscar ou criar uma entrada na tabela CityForecast
+    let cityForecast = await CityForecast.findOne({ where: { cityId: city.id } });
+
+    if (!cityForecast) {
+      // Se a entrada não existir, cria uma nova
+      cityForecast = await CityForecast.create({
+        cityId: city.id,
+        forecastTime: new Date(), // ou qualquer lógica de data que você queira usar
+      });
+    }
+
     const weatherForecastData = {
       cityId: city.id,
-      city_name: city.name, // Adiciona o nome da cidade
-      country: city.State.Country.name, // Adiciona o nome do país
+      cityForecastId: cityForecast.id, // Use o id da CityForecast
+      city_name: city.name,
+      country: city.State.Country.name,
       temperature: weatherData.main.temp,
       feels_like: weatherData.main.feels_like,
       temp_min: weatherData.main.temp_min,
@@ -66,10 +90,20 @@ const addCityAndGetWeather = async (req, res) => {
       timestamp: weatherData.dt,
     };
 
-    // 6. Salvar dados climáticos na tabela WeatherForecast
-    await WeatherForecast.create(weatherForecastData);
+    // 7. Verificar se já existe uma previsão do tempo para esta cidade e atualizar
+    const existingWeatherForecast = await WeatherForecast.findOne({
+      where: { cityId: city.id, cityForecastId: cityForecast.id }
+    });
 
-    // 7. Retornar resposta com dados climáticos e de localização
+    if (existingWeatherForecast) {
+      // Atualiza os dados existentes
+      await existingWeatherForecast.update(weatherForecastData);
+    } else {
+      // Salvar novos dados climáticos na tabela WeatherForecast
+      await WeatherForecast.create(weatherForecastData);
+    }
+
+    // 8. Retornar resposta com dados climáticos e de localização
     return res.json({
       city: city.name,
       state: city.State.name,
