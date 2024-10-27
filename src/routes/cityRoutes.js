@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const cityControl = require("../controllers/cityController");
-
-router.post("/weather", cityControl.addCityAndGetWeather); //contexto é de wheather / forecast, mover esse endpoint / metodos agregados para as devidas classes
+const cityControl = require("../controllers/CityController");
 
 router.get("/city", cityControl.getCityByName);
 

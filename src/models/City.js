@@ -1,8 +1,8 @@
 const { DataTypes, Model } = require("sequelize");
-const sequelize = require("../config/database");
+const sequelize = require("../config/DatabaseConfig");
 const State = require("./State");
 
-class City extends Model { }
+class City extends Model {}
 
 City.init(
   {

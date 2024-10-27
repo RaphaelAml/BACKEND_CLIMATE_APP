@@ -1,11 +1,11 @@
 const express = require("express");
-const sequelize = require("./src/config/database");
-const { Op } = require('sequelize');
-const cityRoutes = require("./src/routes/cityRoutes");
+const sequelize = require("./src/config/DatabaseConfig");
+const { Op } = require("sequelize");
+const cityRoutes = require("./src/routes/CityRoutes");
+const wheatherRoutes = require("./src/routes/WheatherRoutes");
 const cors = require("cors");
-require("./src/models/associations");
+require("./src/models/Associations");
 require("dotenv").config();
-
 
 const app = express();
 const PORT = process.env.PORT || 3002;
