@@ -2,7 +2,7 @@ const express = require("express");
 const sequelize = require("./src/config/DatabaseConfig");
 const { Op } = require("sequelize");
 const cityRoutes = require("./src/routes/CityRoutes");
-const wheatherRoutes = require("./src/routes/WheatherRoutes");
+const wheatherForecastRoutes = require("./src/routes/WheatherForecastRoutes");
 const cors = require("cors");
 require("./src/models/Associations");
 require("dotenv").config();
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 });
 
 // Usar rotas
-app.use("/api", cityRoutes, wheatherRoutes);
+app.use("/api", cityRoutes, wheatherForecastRoutes);
 
 // Erro de rota n encontrada
 app.use((req, res) => {
