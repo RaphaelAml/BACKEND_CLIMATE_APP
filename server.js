@@ -29,6 +29,8 @@ app.use((req, res) => {
   res.status(404).send("Route not found");
 });
 
+//Declaração de Models
+
 // Inicializa Sequelize e sincroniza os modelos
 sequelize
   .sync({ alter: true })

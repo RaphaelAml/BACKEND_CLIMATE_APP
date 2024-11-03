@@ -1,48 +1,35 @@
 const axios = require("axios");
-const WeatherForecast = require("../models/WeatherForecast");
 
-const API_KEY = process.env.OPENWEATHER_API_KEY;
-const BASE_URL = process.env.OPENWEATHER_API_URL;
-
-const getWeatherByCity = async (cityName) => {
-  try {
+class WeatherService {
+  static async getWeatherData(city) {
     const response = await axios.get(
-      `${BASE_URL}?q=${cityName}&appid=${API_KEY}`
+      "https://api.openweathermap.org/data/2.5/weather",
+      {
+        params: {
+          lat: city.latitude,
+          lon: city.longitude,
+          appid: API_KEY,
+          units: "metric",
+        },
+      }
     );
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching weather data:", error);
-    throw error;
+
+    const weatherData = response.data;
+    return {
+      temperature: weatherData.main.temp,
+      feels_like: weatherData.main.feels_like,
+      temp_min: weatherData.main.temp_min,
+      temp_max: weatherData.main.temp_max,
+      pressure: weatherData.main.pressure,
+      humidity: weatherData.main.humidity,
+      visibility: weatherData.visibility,
+      wind_speed: weatherData.wind.speed,
+      wind_deg: weatherData.wind.deg,
+      weather_id: weatherData.weather[0].id,
+      weather_main: weatherData.weather[0].main,
+      weather_description: weatherData.weather[0].description,
+    };
   }
-};
+}
 
-const saveWeatherData = async (data, cityForecastId, cityId) => {
-  try {
-    const weatherForecast = await WeatherForecast.create({
-      cityForecastId: cityForecastId,
-      cityId: cityId,
-      temperature: data.main.temp,
-      feels_like: data.main.feels_like,
-      temp_min: data.main.temp_min,
-      temp_max: data.main.temp_max,
-      pressure: data.main.pressure,
-      humidity: data.main.humidity,
-      visibility: data.visibility,
-      wind_speed: data.wind.speed,
-      wind_deg: data.wind.deg,
-      weather_id: data.weather[0].id,
-      weather_main: data.weather[0].main,
-      weather_description: data.weather[0].description,
-      city_name: data.name,
-      country: data.sys.country,
-      timestamp: data.dt,
-    });
-
-    return weatherForecast;
-  } catch (error) {
-    console.error("Error saving weather data:", error);
-    throw error; // Lançar o erro para ser tratado no controller
-  }
-};
-
-module.exports = { getWeatherByCity, saveWeatherData }; // Exporte a nova função
+module.exports = WeatherService;
