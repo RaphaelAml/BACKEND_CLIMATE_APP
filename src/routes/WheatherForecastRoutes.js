@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const wheatherForecastController = require("../controllers/WeatherForecastController");
+const weatherForecastController = require("../controllers/WeatherForecastController");
 
-router.post("/weather", wheatherForecastController.GetWeatherByCityAndDate);
+router.post("/weather", weatherForecastController.GetWeatherByCityAndDate);
 
-router.post("/forecast", wheatherForecastController.GetForecastByCityAndDate);
+router.post("/forecast", weatherForecastController.GetForecastByCityAndDate);
 
 module.exports = router;

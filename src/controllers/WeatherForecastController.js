@@ -80,13 +80,13 @@ const GetWeatherByCityAndDate = async (req, res) => {
       // Se a entrada não existir, cria uma nova
       cityForecast = await CityForecast.create({
         cityId: city.id,
-        forecastTime: new Date(date), // ou qualquer lógica de data que você queira usar
+        forecastTime: new Date(date), 
       });
     }
 
     const weatherForecastData = {
       cityId: city.id,
-      cityForecastId: cityForecast.id, // Use o id da CityForecast
+      cityForecastId: cityForecast.id, 
       city_name: city.name,
       country: city.State.Country.name,
       temperature: weatherData.main.temp,
@@ -133,6 +133,7 @@ const GetWeatherByCityAndDate = async (req, res) => {
     return res.status(500).json({ message: "Backend error." });
   }
 };
+
 
 const GetForecastByCityAndDate = async (req, res) => {
   const { cityName } = req.body;
